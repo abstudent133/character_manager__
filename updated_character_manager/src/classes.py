@@ -30,6 +30,8 @@ f = f()
 #import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+#import pandas
+import pandas 
 
 #A faker dynamic provider that gets a class
 class_provider = dp(provider_name="class_provider", elements=["Knight", "Wizard", "Thief", "Mage","Rouge"])
@@ -80,7 +82,7 @@ class DataVisualization:
         categories = ['Strength', 'Wisdom', 'Charisma', 'Intelligence']
         #get the info for the character and input it as the values for the catigories
         values_one = [self.character.get("strength"),self.character.get("wisdom"), self.character.get("charisma"),self.character.get("intelligence")]
-        values_two = [self.optional.get("strength"),self.optional.get("wisdom"), self.optional.get("charisma"),self.optional.get("intelligence")]
+        values_two = [self.char_two.get("strength"),self.char_two.get("wisdom"), self.char_two.get("charisma"),self.char_two.get("intelligence")]
         #display the graph
         plt.subplot(1, 2, 1)
         plt.bar(categories, values_one)
@@ -95,7 +97,44 @@ class DataVisualization:
         #formating all the info
         #display it in a pretty way
 
+#statistical analysis
+framed=helpers.amalgamate(chars)
+#get user input for option: score information, class popularity, skill popularity
+choic=input('1. Attribute Information\n2. Class Popularity\n3. Skill Popularity\n')
+while choic not in ['1','2','3']:
+    print('Invalid input. Try again.')
+    choic=input('1. Attribute Information\n2. Class Popularity\n3. Skill Popularity\n')
+#if score information
+if choic=='1':
+    #show mean,median,max,min among str,spd,mag
+    print(f'Strength:\nMean: {framed.loc[1].mean()}\nMedian: {framed.loc[1].median()}\nMaximum: {framed.loc[1].max()}\nMinimum: {framed.loc[1].min()}\n')
+    print(f'Speed:\nMean: {framed.loc[2].mean()}\nMedian: {framed.loc[2].median()}\nMaximum: {framed.loc[2].max()}\nMinimum: {framed.loc[2].min()}\n')
+    print(f'Magic:\nMean: {framed.loc[3].mean()}\nMedian: {framed.loc[3].median()}\nMaximum: {framed.loc[3].max()}\nMinimum: {framed.loc[3].min()}\n')
+
+#helpers.amalgamate:
+def amalgamate(chars):
+    out={}
+    for i in chars.keys():
+        out|=chars[i].dictify()
+    return pandas.DataFrame(out)
+
+#Character method dictify:
+def dictify(self):
+        return {self.name:[self.clas,self.str,self.spd,self.mag,self.skill,self.holds,self.level]}
 
 
 
+character = {"strength": 1,
+             "wisdom": 2,
+             "charisma": 3,
+             "intelligence": 4,
+             "strength tracking": [0,1,2,3],
+             "wisdom tracking": [0,2,3,4],
+             "charisma tracking": [0,3,4,5],
+             "intelligence tracking": [0,4,5,6]}
+
+show_char = DataVisualization(character,character)
+
+
+show_char.display()
 
