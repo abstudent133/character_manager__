@@ -155,22 +155,3 @@ def statistical_analysis():
         cs=framed.loc[4].eq({'Change Spell':'Use melee spell attacks as ranged spell attacks, and ranged spell attacks as melee spell attacks.'}).sum()
         print(f'Snipe: {snipe/(snipe+pa+parry+disarm+qs+cs)*100}%\nPierce Armor: {pa/(snipe+pa+parry+disarm+qs+cs)*100}%\nParry: {parry/(snipe+pa+parry+disarm+qs+cs)*100}%\nDisarm: {disarm/(snipe+pa+parry+disarm+qs+cs)*100}%\nQuick Spell: {qs/(snipe+pa+parry+disarm+qs+cs)*100}%\nChange Spell: {cs/(snipe+pa+parry+disarm+qs+cs)*100}%')
 
-
-
-
-
-
-character = {"strength": 1,
-             "wisdom": 2,
-             "charisma": 3,
-             "intelligence": 4,
-             "strength tracking": [0,1,2,3],
-             "wisdom tracking": [0,2,3,4],
-             "charisma tracking": [0,3,4,5],
-             "intelligence tracking": [0,4,5,6]}
-
-show_char = DataVisualization(character,character)
-
-
-show_char.display()
-
