@@ -32,6 +32,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 #import pandas
 import pandas 
+from helper import *
 
 #A faker dynamic provider that gets a class
 class_provider = dp(provider_name="class_provider", elements=["Knight", "Wizard", "Thief", "Mage","Rouge"])
@@ -97,30 +98,65 @@ class DataVisualization:
         #formating all the info
         #display it in a pretty way
 
+class Character():
+    #initialize all the stuff
+    def __init__(self, name, character_class, species, level, strength=0, wisdom=0, charisma=0, intelligence=0):
+        self.name = name
+        self.character_class = character_class
+        self.species = species
+        self.level = level
+        self.strength = strength
+        self.wisdom = wisdom
+        self.charisma = charisma
+        self.intelligence = intelligence
+    #Character method dictify:
+    def dictify(self):
+        return {
+            "name": self.name,
+            "class": self.character_class,
+            "species": self.species,
+            "level": self.level,
+            "strength": self.strength,
+            "wisdom": self.wisdom,
+            "charisma": self.charisma,
+            "intelligence": self.intelligence
+        }
+
 #statistical analysis
-framed=helpers.amalgamate(chars)
-#get user input for option: score information, class popularity, skill popularity
-choic=input('1. Attribute Information\n2. Class Popularity\n3. Skill Popularity\n')
-while choic not in ['1','2','3']:
-    print('Invalid input. Try again.')
+def statistical_analysis():
+    framed = amalgamate(csv_to_dictionary("docs/character_csv.csv"))
+    #get user input for option: score information, class popularity, skill popularity
     choic=input('1. Attribute Information\n2. Class Popularity\n3. Skill Popularity\n')
-#if score information
-if choic=='1':
-    #show mean,median,max,min among str,spd,mag
-    print(f'Strength:\nMean: {framed.loc[1].mean()}\nMedian: {framed.loc[1].median()}\nMaximum: {framed.loc[1].max()}\nMinimum: {framed.loc[1].min()}\n')
-    print(f'Speed:\nMean: {framed.loc[2].mean()}\nMedian: {framed.loc[2].median()}\nMaximum: {framed.loc[2].max()}\nMinimum: {framed.loc[2].min()}\n')
-    print(f'Magic:\nMean: {framed.loc[3].mean()}\nMedian: {framed.loc[3].median()}\nMaximum: {framed.loc[3].max()}\nMinimum: {framed.loc[3].min()}\n')
+    while choic not in ['1','2','3']:
+        print('Invalid input. Try again.')
+        choic=input('1. Attribute Information\n2. Class Popularity\n3. Skill Popularity\n')
+    #if score information
+    if choic=='1':
+        #show mean,median,max,min among str,spd,mag
+        print(f'Strength:\nMean: {framed.loc[1].mean()}\nMedian: {framed.loc[1].median()}\nMaximum: {framed.loc[1].max()}\nMinimum: {framed.loc[1].min()}\n')
+        print(f'Speed:\nMean: {framed.loc[2].mean()}\nMedian: {framed.loc[2].median()}\nMaximum: {framed.loc[2].max()}\nMinimum: {framed.loc[2].min()}\n')
+        print(f'Magic:\nMean: {framed.loc[3].mean()}\nMedian: {framed.loc[3].median()}\nMaximum: {framed.loc[3].max()}\nMinimum: {framed.loc[3].min()}\n')
+    #other statistical bits
+    #else if class popularity
+    elif choic=='2':
+        #show classes and percentages from most to leasr self.skills={'archer':{'Snipe':'Ranged weapon range is doubled','Pierce Armor':'Double damage of ranged weapons.'},'knight':{'Parry':'Use a melee attack to negate an enemy\'s next attack','Disarm':'Use a melee attack to remove an enemy\'s weapon.'},'wizard':{'Quick Spell':'Cast two spells as one attack.','Change Spell':'Use melee spell attacks as ranged spell attacks, and ranged spell attacks as melee spell attacks.'}}
+        kngt=framed.loc[0].eq('knight').sum()
+        arcr=framed.loc[0].eq('archer').sum()
+        wzrd=framed.loc[0].eq('wizard').sum()
+        print(f'{kngt/(kngt+arcr+wzrd)*100}% of characters have the Knight class.\n{arcr/(kngt+arcr+wzrd)*100}% of characters have the Archer class.\n{wzrd/(kngt+arcr+wzrd)*100}% of characters have the Wizard class.')
+    #else if skill popularity
+    elif choic=='3':
+        #do that ^ but with skills
+        snipe=framed.loc[4].eq({'Snipe':'Ranged weapon range is doubled'}).sum()
+        pa=framed.loc[4].eq({'Pierce Armor':'Double damage of ranged weapons.'}).sum()
+        parry=framed.loc[4].eq({'Parry':'Use a melee attack to negate an enemy\'s next attack'}).sum()
+        disarm=framed.loc[4].eq({'Disarm':'Use a melee attack to remove an enemy\'s weapon.'}).sum()
+        qs=framed.loc[4].eq({'Quick Spell':'Cast two spells as one attack.'}).sum()
+        cs=framed.loc[4].eq({'Change Spell':'Use melee spell attacks as ranged spell attacks, and ranged spell attacks as melee spell attacks.'}).sum()
+        print(f'Snipe: {snipe/(snipe+pa+parry+disarm+qs+cs)*100}%\nPierce Armor: {pa/(snipe+pa+parry+disarm+qs+cs)*100}%\nParry: {parry/(snipe+pa+parry+disarm+qs+cs)*100}%\nDisarm: {disarm/(snipe+pa+parry+disarm+qs+cs)*100}%\nQuick Spell: {qs/(snipe+pa+parry+disarm+qs+cs)*100}%\nChange Spell: {cs/(snipe+pa+parry+disarm+qs+cs)*100}%')
 
-#helpers.amalgamate:
-def amalgamate(chars):
-    out={}
-    for i in chars.keys():
-        out|=chars[i].dictify()
-    return pandas.DataFrame(out)
 
-#Character method dictify:
-def dictify(self):
-        return {self.name:[self.clas,self.str,self.spd,self.mag,self.skill,self.holds,self.level]}
+
 
 
 
