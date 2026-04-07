@@ -8,7 +8,7 @@ from helper import *
 def main_menu():
     # store characters (you currently only generate random ones)
     character_list = []
-
+    file_path = "docs/character_csv.csv"
     while True:
         print("\n=====================================")
         print("ENHANCED RPG CHARACTER MANAGER")
@@ -74,7 +74,6 @@ def main_menu():
                 print("No characters to save!")
                 continue
 
-            file_path = input("Enter file path: ")
 
             # convert all characters to dictionaries
             data = [char.dictify() for char in character_list]
@@ -83,7 +82,6 @@ def main_menu():
             print("Saved successfully!")
 
         elif choice == "5":
-            file_path = input("Enter file path: ")
             data = csv_to_dictionary(file_path)
             if 'error' in data:
                 continue
